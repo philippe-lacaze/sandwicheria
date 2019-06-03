@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:sandwicheria/core/viewmodels/preparer_commandes_model.dart';
-import 'package:sandwicheria/ui/preparer/views/base_view.dart';
+import 'package:sandwicheria/ui/base_view.dart';
 import 'package:sandwicheria/ui/menu_view.dart';
 import 'package:sandwicheria/ui/preparer/views/preparer_commande_view.dart';
 

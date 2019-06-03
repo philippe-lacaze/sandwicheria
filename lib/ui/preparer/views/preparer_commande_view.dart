@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sandwicheria/core/models/commande.dart';
 import 'package:sandwicheria/core/viewmodels/preparer_commande_model.dart';
-import 'package:sandwicheria/ui/preparer/views/base_view.dart';
+import 'package:sandwicheria/ui/base_view.dart';
 
 class PreparerCommandeView extends StatelessWidget {
   final Commande _commande;

@@ -109,4 +109,50 @@ class ConfigService {
   Future<List<ConfigMenu>> fetchMenus() async {
     return await _menus;
   }
+
+  List<String> getMenus() {
+    return _menus
+        .map((ConfigMenu configMenu) => configMenu.id)
+        .toList(growable: false);
+  }
+
+  List<String> getPlats(String menuId) {
+    if (menuId == null) {
+      return [];
+    }
+    ConfigMenu configMenu = getConfigMenu(menuId);
+    return configMenu?.plats
+            .map((ConfigPlat configPlat) => configPlat.nom)
+            .toList(growable: false) ??
+        [];
+  }
+
+  ConfigMenu getConfigMenu(String menuId) {
+    ConfigMenu configMenu = _menus.singleWhere(
+        (ConfigMenu configMenu) => configMenu.id == menuId,
+        orElse: null);
+    return configMenu;
+  }
+
+  ConfigPlat getConfigPlat(String menuId, String nomPlat) {
+    if (menuId == null || nomPlat == null) {
+      return null;
+    }
+    ConfigMenu configMenu = getConfigMenu(menuId);
+    if (configMenu == null) {
+      return null;
+    }
+    return configMenu.plats.singleWhere((ConfigPlat configPlat) => configPlat.nom == nomPlat, orElse: null);
+  }
+
+  List<String> getPains(String menuId, String nomPlat) {
+    if (menuId == null || nomPlat == null) {
+      return [];
+    }
+    ConfigPlat configPlat = getConfigPlat(menuId, nomPlat);
+    if (configPlat == null) {
+      return [];
+    }
+    return configPlat.pain;
+  }
 }
