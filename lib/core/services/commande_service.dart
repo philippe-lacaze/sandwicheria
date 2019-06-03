@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:sandwicheria/core/models/commande.dart';
 
 class CommandeService {
-  static const _endpoint = 'http://192.168.1.49:8080/api/commande';
+  static const _endpoint = 'http://localhost:8080/api/commande';
   static Map<String, String> _headers = {'Content-Type': 'application/json'};
 
   var client = new http.Client();
