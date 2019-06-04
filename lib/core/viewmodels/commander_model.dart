@@ -12,11 +12,13 @@ class CommanderModel extends BaseModel {
   String _choixMenu;
   String _choixPlat;
 
-  Map<String, bool> _initialChoixAutres = {
+  Map<String, bool> _initialChoixFaits = {
+    "menu": false,
+    "plat": false,
     "pain": false
   };
 
-  Map<String, bool> _choixAutres;
+  Map<String, bool> _choixFaits;
 
   CommandeService _commanderService = locator<CommandeService>();
   ConfigService _configService = locator<ConfigService>();
@@ -27,7 +29,7 @@ class CommanderModel extends BaseModel {
   }
 
   void _razChoixAutres() {
-    choixAutres = Map.from(_initialChoixAutres);
+    choixFaits = Map.from(_initialChoixFaits);
   }
 
   String get choixMenu => _choixMenu;
@@ -56,15 +58,15 @@ class CommanderModel extends BaseModel {
 
   ConfigService get configService => _configService;
 
-  Map<String, bool> get choixAutres => _choixAutres;
+  Map<String, bool> get choixFaits => _choixFaits;
 
-  set choixAutres(Map<String, bool> value) {
-    _choixAutres = value;
+  set choixFaits(Map<String, bool> value) {
+    _choixFaits = value;
     notifyListeners();
   }
 
-  void setChoixAutres(String choix, bool value) {
-    choixAutres[choix] = value;
+  void setChoixFaits(String choix, bool value) {
+    choixFaits[choix] = value;
     notifyListeners();
   }
 

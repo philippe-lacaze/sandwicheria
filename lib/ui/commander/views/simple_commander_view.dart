@@ -69,11 +69,12 @@ class _SimpleCommanderViewState extends State<SimpleCommanderView> {
         children: <Widget>[
 
           TextFormField(
-            autofocus: true,
+
             autovalidate: isFormChanged,
             initialValue: commande.client,
             decoration: InputDecoration(
               hasFloatingPlaceholder: true,
+
               border: OutlineInputBorder(),
               helperText: "Le nom est requis",
               labelText: "Nom du client",

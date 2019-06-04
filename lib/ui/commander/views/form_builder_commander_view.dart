@@ -13,7 +13,7 @@ class FormBuilderCommanderView extends StatefulWidget {
 
 class _FormBuilderCommanderViewState extends State<FormBuilderCommanderView> {
   final GlobalKey<FormBuilderState> _formKey =
-      new GlobalKey<FormBuilderState>();
+  new GlobalKey<FormBuilderState>();
 
   bool _isFormChanged = false;
 
@@ -22,10 +22,14 @@ class _FormBuilderCommanderViewState extends State<FormBuilderCommanderView> {
     return (map != null) ? map[name] : null;
   }
 
-  _if({String name, Function condition, Widget child}) {
+  _ifFormValue({String name, Function condition, Widget child}) {
     var value = _formValue(name);
     var isOk = condition(value);
     return isOk ? child : Container();
+  }
+
+  _if({Function condition, Widget child}) {
+    return (condition()) ? child : Container();
   }
 
   @override
@@ -43,21 +47,18 @@ class _FormBuilderCommanderViewState extends State<FormBuilderCommanderView> {
               padding: const EdgeInsets.all(8.0),
               child: FormBuilder(
                   key: _formKey,
-                  autovalidate: _isFormChanged,
+                  autovalidate: false,
                   onChanged: (_) => setState(() => _isFormChanged = true),
                   child: ListView(
                     children: <Widget>[
                       _clientField(model),
                       _menuField(model),
-                      _if(
-                          name: "menu",
-                          condition: (value) => value != null,
+                      _if(condition: () => model.choixMenu != null,
                           child: Column(
                             children: <Widget>[_platField(model)],
                           )),
                       _if(
-                          name: "plat",
-                          condition: (value) => value != null,
+                          condition: () => model.choixFaits["plat"],
                           child: Column(
                             children: <Widget>[_painField(model)],
                           )),
@@ -68,7 +69,7 @@ class _FormBuilderCommanderViewState extends State<FormBuilderCommanderView> {
                           _formKey.currentState.save();
                           if (_formKey.currentState.validate()) {
                             var commande =
-                                Commande.fromJson(_formKey.currentState.value);
+                            Commande.fromJson(_formKey.currentState.value);
                             print("Commande = $commande");
                           } else {
                             print("validation failed");
@@ -83,9 +84,14 @@ class _FormBuilderCommanderViewState extends State<FormBuilderCommanderView> {
   }
 }
 
-_clientField(CommanderModel model) => FormBuilderTextField(
+_clientField(CommanderModel model) =>
+    FormBuilderTextField(
       attribute: "client",
-      decoration: InputDecoration(labelText: "Client"),
+      decoration: InputDecoration(
+        labelText: "Client",
+        helperText: "Le nom est requis",
+        hasFloatingPlaceholder: true,
+        border: OutlineInputBorder(),),
       autofocus: true,
       initialValue: model.commande.client,
       validators: [
@@ -94,12 +100,14 @@ _clientField(CommanderModel model) => FormBuilderTextField(
       ],
     );
 
-_menuField(CommanderModel model) => FormBuilderRadio(
+_menuField(CommanderModel model) =>
+    FormBuilderRadio(
       decoration: InputDecoration(labelText: 'Choisissez un menu'),
       attribute: "menu",
       leadingInput: true,
       onChanged: (value) {
         model.choixMenu = value;
+        model.setChoixFaits("menu", true);
       },
       validators: [FormBuilderValidators.required()],
       initialValue: model.commande.menu,
@@ -109,12 +117,14 @@ _menuField(CommanderModel model) => FormBuilderRadio(
           .toList(growable: false),
     );
 
-_platField(CommanderModel model) => FormBuilderRadio(
+_platField(CommanderModel model) =>
+    FormBuilderRadio(
       decoration: InputDecoration(labelText: 'Choisissez un plat'),
       attribute: "plat",
       leadingInput: true,
       onChanged: (value) {
         model.choixPlat = value;
+        model.setChoixFaits("plat", true);
       },
       validators: [FormBuilderValidators.required()],
       initialValue: model.commande.plat,
@@ -124,17 +134,18 @@ _platField(CommanderModel model) => FormBuilderRadio(
           .toList(growable: false),
     );
 
-_painField(CommanderModel model) => FormBuilderRadio(
-  decoration: InputDecoration(labelText: 'Choisissez un pain'),
-  attribute: "pain",
-  leadingInput: true,
-  onChanged: (value) {
-    model.setChoixAutres("pain", true);
-  },
-  validators: [FormBuilderValidators.required()],
-  initialValue: model.commande.pain,
-  options: model.configService
-      .getPains(model.choixMenu, model.choixPlat)
-      .map((val) => FormBuilderFieldOption(value: val))
-      .toList(growable: false),
-);
+_painField(CommanderModel model) =>
+    FormBuilderRadio(
+      decoration: InputDecoration(labelText: 'Choisissez un pain'),
+      attribute: "pain",
+      leadingInput: true,
+      onChanged: (value) {
+        model.setChoixFaits("pain", true);
+      },
+      validators: [FormBuilderValidators.required()],
+      initialValue: model.commande.pain,
+      options: model.configService
+          .getPains(model.choixMenu, model.choixPlat)
+          .map((val) => FormBuilderFieldOption(value: val))
+          .toList(growable: false),
+    );
