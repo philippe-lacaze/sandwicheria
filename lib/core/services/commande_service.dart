@@ -5,7 +5,8 @@ import 'package:http/http.dart' as http;
 import 'package:sandwicheria/core/models/commande.dart';
 
 class CommandeService {
-  static const _endpoint = 'http://localhost:8080/api/commande';
+  //static const _endpoint = 'http://localhost:8080/api/commande';
+  static const _endpoint = 'https://serene-forest-85695.herokuapp.com/api/commande';
   static Map<String, String> _headers = {'Content-Type': 'application/json'};
 
   var client = new http.Client();
@@ -19,6 +20,14 @@ class CommandeService {
 
   Future<Commande> update(Commande commande) async {
     print('put commande before $commande');
+    var body = json.encode(commande.toJson());
+    var response = await client.put(_endpoint, body: body, headers: _headers);
+    print('put commande response body ${response.body}');
+    return Commande.fromJson(json.decode(response.body));
+  }
+
+  Future<Commande> create(Commande commande) async {
+    print('post commande before $commande');
     var body = json.encode(commande.toJson());
     var response = await client.put(_endpoint, body: body, headers: _headers);
     print('put commande response body ${response.body}');

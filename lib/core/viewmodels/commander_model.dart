@@ -32,9 +32,15 @@ class CommanderModel extends BaseModel {
     choixFaits = Map.from(_initialChoixFaits);
   }
 
-  String get choixMenu => _choixMenu;
+  String get choixMenu {
+    if (_choixMenu == null) {
+      _choixMenu = "pique-nique";
+    }
+    return _choixMenu;
+  }
 
   set choixMenu(String value) {
+    print('CommandeModel set choixMenu = $value');
     _choixMenu = value;
     _razChoixAutres();
     notifyListeners();
@@ -43,6 +49,7 @@ class CommanderModel extends BaseModel {
   String get choixPlat => _choixPlat;
 
   set choixPlat(String value) {
+    print('CommandeModel set choixPlat = $value');
     _choixPlat = value;
     _razChoixAutres();
     notifyListeners();
@@ -68,6 +75,11 @@ class CommanderModel extends BaseModel {
   void setChoixFaits(String choix, bool value) {
     choixFaits[choix] = value;
     notifyListeners();
+  }
+
+  @override
+  String toString() {
+    return 'CommanderModel{_choixMenu: $_choixMenu, _choixPlat: $_choixPlat, _choixFaits: $_choixFaits}';
   }
 
 

@@ -49,38 +49,66 @@ class _StepperBodyState extends State<StepperBody> {
   static MyData data = new MyData();
   List<Step> steps;
 
-  void _iniStepper() {
-    steps = [
-      new Step(
-          title: Text('Menu'),
-          isActive: true,
-          //state: StepState.error,
-          state: StepState.indexed,
-          content: Column(
-            children: <Widget>[
-              RadioListTile<String>(
-                title: const Text('Lafayette'),
-                value: 'lafayette',
-                groupValue: data.menu,
-                onChanged: (String value) {
-                  setState(() {
-                    data.menu = value;
-                  });
-                },
-              ),
-              RadioListTile<String>(
-                title: const Text('Thomas Jefferson'),
-                value: 'jefferson',
-                groupValue: data.menu,
-                onChanged: (String value) {
-                  setState(() {
-                    data.menu = value;
-                  });
+  var _stepAge_active = true;
+  var _stepAge_state  = StepState.disabled;
 
-                },
-              ),
-            ],
-          )),
+  void _iniStepper() {
+
+    Step stepAge = new Step(
+        title: const Text('Age'),
+        // subtitle: const Text('Subtitle'),
+        isActive: _stepAge_active,
+        state: _stepAge_state,
+        content: new TextFormField(
+          keyboardType: TextInputType.number,
+          autocorrect: false,
+          validator: (value) {
+            if (value.isEmpty || value.length > 2) {
+              return 'Please enter valid age';
+            }
+          },
+          maxLines: 1,
+          onSaved: (String value) {
+            data.age = value;
+          },
+          decoration: new InputDecoration(
+              labelText: 'Enter your age',
+              hintText: 'Enter age',
+              icon: const Icon(Icons.explicit),
+              labelStyle:
+              new TextStyle(decorationStyle: TextDecorationStyle.solid)),
+        ));
+    var stepMenu = new Step(
+        title: Text('Menu'),
+        isActive: true,
+        //state: StepState.error,
+        state: StepState.indexed,
+        content: Column(
+          children: <Widget>[
+            RadioListTile<String>(
+              title: const Text('Lafayette'),
+              value: 'lafayette',
+              groupValue: data.menu,
+              onChanged: (String value) {
+                setState(() {
+                  data.menu = value;
+                });
+              },
+            ),
+            RadioListTile<String>(
+              title: const Text('Thomas Jefferson'),
+              value: 'jefferson',
+              groupValue: data.menu,
+              onChanged: (String value) {
+                setState(() {
+                  data.menu = value;
+                });
+              },
+            ),
+          ],
+        ));
+    steps = [
+      //stepMenu,
       new Step(
           title: const Text('Name'),
           //subtitle: const Text('Enter your name'),
@@ -107,7 +135,7 @@ class _StepperBodyState extends State<StepperBody> {
                 //filled: true,
                 icon: const Icon(Icons.person),
                 labelStyle:
-                    new TextStyle(decorationStyle: TextDecorationStyle.solid)),
+                new TextStyle(decorationStyle: TextDecorationStyle.solid)),
           )),
       new Step(
           title: const Text('Phone'),
@@ -132,7 +160,7 @@ class _StepperBodyState extends State<StepperBody> {
                 hintText: 'Enter a number',
                 icon: const Icon(Icons.phone),
                 labelStyle:
-                    new TextStyle(decorationStyle: TextDecorationStyle.solid)),
+                new TextStyle(decorationStyle: TextDecorationStyle.solid)),
           )),
       new Step(
           title: const Text('Email'),
@@ -141,11 +169,20 @@ class _StepperBodyState extends State<StepperBody> {
           state: StepState.indexed,
           // state: StepState.disabled,
           content: new TextFormField(
+            autovalidate: true,
             keyboardType: TextInputType.emailAddress,
             autocorrect: false,
             validator: (value) {
               if (value.isEmpty || !value.contains('@')) {
                 return 'Please enter valid email';
+              } else {
+                var future = new Future.delayed(
+                    const Duration(milliseconds: 10), () =>
+                    setState(() {
+                      _stepAge_active = true;
+                      _stepAge_state = StepState.indexed;
+                    })
+                );
               }
             },
             onSaved: (String value) {
@@ -157,32 +194,10 @@ class _StepperBodyState extends State<StepperBody> {
                 hintText: 'Enter a email address',
                 icon: const Icon(Icons.email),
                 labelStyle:
-                    new TextStyle(decorationStyle: TextDecorationStyle.solid)),
+                new TextStyle(decorationStyle: TextDecorationStyle.solid)),
           )),
-      new Step(
-          title: const Text('Age'),
-          // subtitle: const Text('Subtitle'),
-          isActive: true,
-          state: StepState.indexed,
-          content: new TextFormField(
-            keyboardType: TextInputType.number,
-            autocorrect: false,
-            validator: (value) {
-              if (value.isEmpty || value.length > 2) {
-                return 'Please enter valid age';
-              }
-            },
-            maxLines: 1,
-            onSaved: (String value) {
-              data.age = value;
-            },
-            decoration: new InputDecoration(
-                labelText: 'Enter your age',
-                hintText: 'Enter age',
-                icon: const Icon(Icons.explicit),
-                labelStyle:
-                    new TextStyle(decorationStyle: TextDecorationStyle.solid)),
-          )),
+      stepAge
+
       // new Step(
       //     title: const Text('Fifth Step'),
       //     subtitle: const Text('Subtitle'),
@@ -210,6 +225,8 @@ class _StepperBodyState extends State<StepperBody> {
 
   @override
   Widget build(BuildContext context) {
+    print('Stepper builds... $steps');
+
     void showSnackBarMessage(String message,
         [MaterialColor color = Colors.red]) {
       Scaffold.of(context)
@@ -257,59 +274,59 @@ class _StepperBodyState extends State<StepperBody> {
 
     return new Container(
         child: new Form(
-      key: _formKey,
-      child: new ListView(children: <Widget>[
+          key: _formKey,
+          child: new ListView(children: <Widget>[
 
-        Text('data = $data'),
+            Text('data = $data'),
 
-        new Stepper(
-          steps: steps,
-          type: StepperType.vertical,
-          currentStep: this.currStep,
-          onStepContinue: () {
-            setState(() {
-              if (currStep < steps.length - 1) {
-                currStep = currStep + 1;
-              } else {
-                currStep = 0;
-              }
-              // else {
-              // Scaffold
-              //     .of(context)
-              //     .showSnackBar(new SnackBar(content: new Text('$currStep')));
+            new Stepper(
+              steps: steps,
+              type: StepperType.vertical,
+              currentStep: this.currStep,
+              onStepContinue: () {
+                setState(() {
+                  if (currStep < steps.length - 1) {
+                    currStep = currStep + 1;
+                  } else {
+                    currStep = 0;
+                  }
+                  // else {
+                  // Scaffold
+                  //     .of(context)
+                  //     .showSnackBar(new SnackBar(content: new Text('$currStep')));
 
-              // if (currStep == 1) {
-              //   print('First Step');
-              //   print('object' + FocusScope.of(context).toStringDeep());
-              // }
+                  // if (currStep == 1) {
+                  //   print('First Step');
+                  //   print('object' + FocusScope.of(context).toStringDeep());
+                  // }
 
-              // }
-            });
-          },
-          onStepCancel: () {
-            setState(() {
-              if (currStep > 0) {
-                currStep = currStep - 1;
-              } else {
-                currStep = 0;
-              }
-            });
-          },
-          onStepTapped: (step) {
-            setState(() {
-              currStep = step;
-            });
-          },
-        ),
-        new RaisedButton(
-          child: new Text(
-            'Save details',
-            style: new TextStyle(color: Colors.white),
-          ),
-          onPressed: _submitDetails,
-          color: Colors.blue,
-        ),
-      ]),
-    ));
+                  // }
+                });
+              },
+              onStepCancel: () {
+                setState(() {
+                  if (currStep > 0) {
+                    currStep = currStep - 1;
+                  } else {
+                    currStep = 0;
+                  }
+                });
+              },
+              onStepTapped: (step) {
+                setState(() {
+                  currStep = step;
+                });
+              },
+            ),
+            new RaisedButton(
+              child: new Text(
+                'Save details',
+                style: new TextStyle(color: Colors.white),
+              ),
+              onPressed: _submitDetails,
+              color: Colors.blue,
+            ),
+          ]),
+        ));
   }
 }

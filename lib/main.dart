@@ -3,8 +3,9 @@ import 'package:sandwicheria/core/models/commande.dart';
 import 'package:sandwicheria/core/services/commande_service.dart';
 import 'package:sandwicheria/locator.dart';
 import 'package:sandwicheria/router.dart';
-import 'package:sandwicheria/ui/stepper_example.dart';
-
+import 'package:sandwicheria/ui/theme/my_theme.dart';
+import 'package:sandwicheria/ui/widgets/gradient_app_bar.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
   setupLocator();
@@ -16,12 +17,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('fr'),
+      ],
       debugShowCheckedModeBanner: false,
       title: 'La Sandwicheria',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      initialRoute: 'commander',
+      theme: MyTheme.defaultLightTheme,
+      initialRoute: 'commanderStepper',
       onGenerateRoute: Router.generateRoute,
     );
   }
@@ -137,7 +143,9 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
+      appBar: GradientAppBar(
+        backgroundColorStart: Colors.red,
+        backgroundColorEnd: primaryColorDark,
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),

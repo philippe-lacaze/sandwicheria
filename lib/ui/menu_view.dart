@@ -23,7 +23,7 @@ class Menu extends StatelessWidget {
             // ...
             // Then close the drawer
             Navigator.pop(context);
-            Navigator.pushNamed(context, 'commander');
+            Navigator.pushNamed(context, 'commanderStepper');
           },
         ),
         ListTile(
@@ -36,6 +36,17 @@ class Menu extends StatelessWidget {
             Navigator.pushNamed(context, 'preparer');
           },
         ),
+        ListTile(
+          title: Text('Administration',
+              style: Theme.of(context).textTheme.subhead),
+          leading: Icon(Icons.build),
+          onTap: () {
+            // Update the state of the app
+            Navigator.pop(context);
+            Navigator.pushNamed(context, 'administrer');
+          },
+        )
+
       ],
     );
   }

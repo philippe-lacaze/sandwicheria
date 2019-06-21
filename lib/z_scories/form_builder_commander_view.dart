@@ -52,10 +52,10 @@ class _FormBuilderCommanderViewState extends State<FormBuilderCommanderView> {
                   child: ListView(
                     children: <Widget>[
                       _clientField(model),
-                      _menuField(model),
+                      menuField(model),
                       _if(condition: () => model.choixMenu != null,
                           child: Column(
-                            children: <Widget>[_platField(model)],
+                            children: <Widget>[platField(model)],
                           )),
                       _if(
                           condition: () => model.choixFaits["plat"],
@@ -100,7 +100,7 @@ _clientField(CommanderModel model) =>
       ],
     );
 
-_menuField(CommanderModel model) =>
+menuField(CommanderModel model) =>
     FormBuilderRadio(
       decoration: InputDecoration(labelText: 'Choisissez un menu'),
       attribute: "menu",
@@ -117,7 +117,7 @@ _menuField(CommanderModel model) =>
           .toList(growable: false),
     );
 
-_platField(CommanderModel model) =>
+platField(CommanderModel model) =>
     FormBuilderRadio(
       decoration: InputDecoration(labelText: 'Choisissez un plat'),
       attribute: "plat",

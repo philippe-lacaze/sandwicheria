@@ -117,14 +117,17 @@ class ConfigService {
   }
 
   List<String> getPlats(String menuId) {
+    print("configService getPlats for menu $menuId");
     if (menuId == null) {
       return [];
     }
     ConfigMenu configMenu = getConfigMenu(menuId);
-    return configMenu?.plats
+    List<String> plats = configMenu?.plats
             .map((ConfigPlat configPlat) => configPlat.nom)
             .toList(growable: false) ??
         [];
+    print("configService getPlats = $plats");
+    return plats;
   }
 
   ConfigMenu getConfigMenu(String menuId) {
@@ -142,9 +145,21 @@ class ConfigService {
     if (configMenu == null) {
       return null;
     }
-    return configMenu.plats.singleWhere((ConfigPlat configPlat) => configPlat.nom == nomPlat, orElse: null);
+    return configMenu.plats.singleWhere((ConfigPlat configPlat) => configPlat.nom.contains(nomPlat), orElse: null);
   }
 
+
+  List<String> getOptionsPlat(String menuId, String nomPlat, String nomOptions) {
+    if (menuId == null || nomPlat == null) {
+      return [];
+    }
+    ConfigPlat configPlat = getConfigPlat(menuId, nomPlat);
+    if (configPlat == null) {
+      return [];
+    }
+    return configPlat.getOptions(nomOptions);
+  }
+  
   List<String> getPains(String menuId, String nomPlat) {
     if (menuId == null || nomPlat == null) {
       return [];

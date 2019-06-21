@@ -50,8 +50,9 @@ class Commande {
         plat: json["plat"],
         pain: json["pain"],
         ingredient: json["ingredient"],
-        accompagnements: json["accompagnements"] != null ?
-            new List<String>.from(json["accompagnements"].map((x) => x)) : null,
+        accompagnements: json["accompagnements"] != null
+            ? new List<String>.from(json["accompagnements"].map((x) => x))
+            : null,
         dessert: json["dessert"],
         complement: json["complement"],
         boisson: json["boisson"],
@@ -67,8 +68,9 @@ class Commande {
         "plat": plat,
         "pain": pain,
         "ingredient": ingredient,
-        "accompagnements": accompagnements != null ?
-            new List<dynamic>.from(accompagnements?.map((x) => x)) : null,
+        "accompagnements": accompagnements != null
+            ? new List<dynamic>.from(accompagnements?.map((x) => x))
+            : null,
         "dessert": dessert,
         "complement": complement,
         "boisson": boisson,
@@ -81,12 +83,10 @@ class Commande {
   }
 
   String articles() {
-    return '${Commande.withThat('', client, ' commande dans le')} ' +
-        '${Commande.withThat('menu ', this.menu)} ' +
-        '${Commande.withThat(', ', this.plat)} ' +
+    return '${Commande.withThat('', this.plat)} ' +
         '${Commande.withThat('', this.pain)} ' +
         '${Commande.withThat('avec ', this.ingredient)} ' +
-        '${Commande.withThat('garni de ', (this.accompagnements != null) ? this.accompagnements.join(', ') : '')}' +
+        '${Commande.withThat('garni de ', (this.accompagnements != null && this.accompagnements.length > 0) ? this.accompagnements.join(', ') : null)}' +
         '${Commande.withThat(', avec comme dessert ', this.dessert)}' +
         '${Commande.withThat(', comme complément ', this.complement)}' +
         '${Commande.withThat(', et comme boisson ', this.boisson)}';
