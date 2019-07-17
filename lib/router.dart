@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sandwicheria/ui/administrer/administration_view.dart';
+import 'package:sandwicheria/ui/preparer/views/preparer_commandes_bloc_view.dart';
 import 'package:sandwicheria/z_tests/TestInherited.dart';
 import 'package:sandwicheria/z_tests/TestStateLiftUp.dart';
 import 'package:sandwicheria/ui/commander/views/commander_my_stepper_view.dart';
@@ -16,7 +17,7 @@ class Router {
       case 'commanderStepper':
         return MaterialPageRoute(builder: (_) => CommanderMyStepperView());
       case 'preparer':
-        return MaterialPageRoute(builder: (_) => PreparerCommandesView());
+        return MaterialPageRoute(builder: (_) => PreparerCommandesBlocView());
       case 'TestStepper':
         return MaterialPageRoute(builder: (_) => StepperExample());
       case 'administrer':
